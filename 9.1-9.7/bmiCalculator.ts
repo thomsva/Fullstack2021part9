@@ -3,7 +3,7 @@ interface BmiInput {
   weight: number;
 }
 
-const parseArguments = (args: Array<string>): BmiInput => {
+const parseBmiArguments = (args: Array<string>): BmiInput => {
   if (args.length < 4) throw new Error('Not enough arguments');
   if (args.length > 4) throw new Error('Too many arguments');
   if (isNaN(Number(args[2])) && isNaN(Number(args[3]))) {
@@ -16,7 +16,7 @@ const parseArguments = (args: Array<string>): BmiInput => {
   }
 }
 
-const calculateBmi = (l: number , w: number) : string => {
+export const calculateBmi = (l: number , w: number) : string => {
     l=l/100; //convert cm to m
     let bmi=w/(l*l); 
     if (bmi<18.5) return 'Underweight';
@@ -26,7 +26,7 @@ const calculateBmi = (l: number , w: number) : string => {
 }
   
 try {
-  const { length, weight } = parseArguments(process.argv);
+  const { length, weight } = parseBmiArguments(process.argv);
   console.log(calculateBmi(length, weight));
 } catch (error: unknown) {
   let errorMessage = 'Something bad happened.'
