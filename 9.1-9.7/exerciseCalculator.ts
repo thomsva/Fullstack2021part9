@@ -21,9 +21,9 @@ const parseExcerciseArguments = (args: Array<string>): ExcerciseInput => {
     return {
       hours: args.slice(3).map(x => Number(x)),
       target: Number(args[2])
-    }
+    };
   }
-}
+};
 
 
 const calculateExercises = (input: ExcerciseInput) : ExcerciseResult => {
@@ -42,13 +42,13 @@ const calculateExercises = (input: ExcerciseInput) : ExcerciseResult => {
       target: input.target,
       average: input.hours.reduce((a, b) => a + b, 0) / input.hours.length
     };
-  } 
+  };
 
 
   try {
     console.log(calculateExercises(parseExcerciseArguments(process.argv)));
   } catch (error: unknown) {
-    let errorMessage = 'Something bad happened.'
+    let errorMessage = 'Something bad happened.';
     if (error instanceof Error) {
       errorMessage += ' Error: ' + error.message;
     }
