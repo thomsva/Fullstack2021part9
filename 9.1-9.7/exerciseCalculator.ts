@@ -26,7 +26,7 @@ const parseExcerciseArguments = (args: Array<string>): ExcerciseInput => {
 };
 
 
-const calculateExercises = (input: ExcerciseInput) : ExcerciseResult => {
+export const calculateExercises = (input: ExcerciseInput) : ExcerciseResult => {
     
     const rating = Math.floor(input.hours
       .filter(x => x >= input.target).length / input.hours.length * 2 + 1);
