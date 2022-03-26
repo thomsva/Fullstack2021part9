@@ -11,11 +11,13 @@ const getPatients = (): Array<PatientPublic> => {
 };
 
 const addPatient = (newPatient: PatientInput): Patient => {
-  //const patient = {id: uuid(), ...newPatient}
+  console.log('newPatient:', newPatient);
   
+  //const patient = {id: uuid(), ...newPatient}
   patientData.push({id: uuid(), ...newPatient});
   return {id: uuid(), ...newPatient};
 };
+
 
 export default {
   getPatients,
