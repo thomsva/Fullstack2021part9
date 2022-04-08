@@ -2,31 +2,37 @@ const App = () => {
   const courseName = "Half Stack application development";
 
   
-// new types
-interface CoursePartBase {
-  name: string;
-  exerciseCount: number;
-  type: string;
-}
+  // new types
+  interface CoursePartBase {
+    name: string;
+    exerciseCount: number;
+    type: string;
+  }
   
-interface CoursePartWithDescription extends CoursePartBase {
-  description: string;
+  interface CoursePartWithDescription extends CoursePartBase {
+    description: string;
+  }
+
+  interface CourseNormalPart extends CoursePartWithDescription {
+    type: "normal";
+  }
+  interface CourseProjectPart extends CoursePartBase {
+    type: "groupProject";
+    groupProjectCount: number;
+  }
+
+  interface CourseSubmissionPart extends CoursePartWithDescription {
+    type: "submission";
+    exerciseSubmissionLink: string;
+  }
+  
+  interface CourseSpecialPart extends CoursePartWithDescription {
+    type: "special";
+    requirements: ("nodejs" | "jest")[],
 }
 
-interface CourseNormalPart extends CoursePartWithDescription {
-  type: "normal";
-}
-interface CourseProjectPart extends CoursePartBase {
-  type: "groupProject";
-  groupProjectCount: number;
-}
-
-interface CourseSubmissionPart extends CoursePartWithDescription {
-  type: "submission";
-  exerciseSubmissionLink: string;
-}
-
-type CoursePart = CourseNormalPart | CourseProjectPart | CourseSubmissionPart;
+  type CoursePart = CourseNormalPart | CourseProjectPart |
+    CourseSubmissionPart | CourseSpecialPart;
 
 
 // this is the new coursePart variable
@@ -55,7 +61,14 @@ const courseParts: CoursePart[] = [
     description: "Confusing description",
     exerciseSubmissionLink: "https://fake-exercise-submit.made-up-url.dev",
     type: "submission"
-  }
+  },
+  {
+  name: "Backend development",
+  exerciseCount: 21,
+  description: "Typing the backend",
+  requirements: ["nodejs", "jest"],
+  type: "special"
+}
 ]
 
 
@@ -77,18 +90,45 @@ const Content = ({ courseParts }: coursePartProps) => {
 const Part = ({ coursePart }: { coursePart: CoursePart }) => {
   switch (coursePart.type) {
     case "normal":
-      return <p>normal</p>;
+      return (
+        <>
+          <p><b>{coursePart.name} {coursePart.exerciseCount}</b><br/>
+          <i>{coursePart.description}</i></p>
+        </>
+      );
       break;
     case "groupProject":
-      return <p>groupProject</p>
+      return (
+        <>
+          <p><b>{coursePart.name} {coursePart.exerciseCount}</b><br/>
+          <i>project excercises {coursePart.groupProjectCount}</i></p>
+        </>
+      );
       break;      
     case "submission":
-      return <p>submission</p>
+      return (
+        <>
+          <p><b>{coursePart.name} {coursePart.exerciseCount}</b><br/>
+            <i>{coursePart.description}<br />
+              submit to {coursePart.exerciseSubmissionLink}</i></p>
+        </>
+      );
       break;
-      default:
-        return (
-          <p> </p>
-        )
+    case "special":
+      return (
+        <>
+          <p><b>{coursePart.name} {coursePart.exerciseCount}</b><br/>
+            <i>{coursePart.description}<br />
+              required skills {coursePart.requirements.map((r, i) => [
+                <span key={i}>{i > 0 && ", "}{r}</span>
+              ])}</i></p>
+        </>
+      );
+      break;
+    default:
+      return (
+        <p>Unknown type</p>
+      )
   }
 }
 
