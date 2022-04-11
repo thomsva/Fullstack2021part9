@@ -4,6 +4,13 @@ import { toPatientInput } from '../utils';
 
 const router = express.Router();
 
+
+router.get('/:id', (_req, res) => {
+  console.log(_req.params.id);
+  // res.send(patientService.getPatients());
+  res.send(patientService.getPatients().find(p => p.id === _req.params.id));
+});
+
 router.get('/', (_req, res) => {
   res.send(patientService.getPatients());
 });
