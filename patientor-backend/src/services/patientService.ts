@@ -10,6 +10,10 @@ const getPatients = (): Array<PublicPatient> => {
   return patients.map(({ssn, ...publicData}) => publicData);
 };
 
+const getPatientAllInfo = (id: string): Patient | undefined => {
+  return patients.find((p: Patient) => p.id === id);
+};
+
 const addPatient = (newPatient: PatientInput): Patient => {
   console.log('newPatient:', newPatient);
   //const patient = {id: uuid(), ...newPatient}
@@ -20,5 +24,6 @@ const addPatient = (newPatient: PatientInput): Patient => {
 
 export default {
   getPatients,
-  addPatient
+  addPatient,
+  getPatientAllInfo
 };

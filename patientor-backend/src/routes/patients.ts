@@ -7,8 +7,12 @@ const router = express.Router();
 
 router.get('/:id', (_req, res) => {
   console.log(_req.params.id);
-  // res.send(patientService.getPatients());
-  res.send(patientService.getPatients().find(p => p.id === _req.params.id));
+  const patient = patientService.getPatientAllInfo(_req.params.id);
+  if (patient) res.send(patient);
+  res.status(404).send('Patient not found');
+  
+
+
 });
 
 router.get('/', (_req, res) => {
