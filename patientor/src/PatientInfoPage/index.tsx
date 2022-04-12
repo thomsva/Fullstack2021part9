@@ -5,7 +5,7 @@ import { apiBaseUrl } from '../constants';
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
 import TransgenderIcon from '@mui/icons-material/Transgender';
-import { useStateValue } from '../state';
+import { addPatientData, useStateValue } from '../state';
 import { Patient } from '../types';
 import { Card, CardContent, Typography } from '@mui/material';
 
@@ -23,7 +23,7 @@ const PatientInfoPage = () => {
             const { data: patientFromApi } = await axios.get<Patient>(
               `${apiBaseUrl}/patients/${id}`
             );
-            dispatch({ type: "ADD_PATIENT_DATA", payload: patientFromApi });
+            dispatch(addPatientData(patientFromApi));
           }
         }
       } catch (e) {
@@ -31,7 +31,7 @@ const PatientInfoPage = () => {
       }
     };
     void fetchPatient();
-  }, [id, dispatch]);
+  }, [dispatch]);
     
   if (!id) return (<div>patient id missing</div>);
 
