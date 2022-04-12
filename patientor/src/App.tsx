@@ -1,8 +1,8 @@
 import React from "react";
 import axios from "axios";
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
-import { Button, Divider, Container } from "@material-ui/core";
-import { Typography } from "@material-ui/core";
+import { Button, Divider, Container } from "@mui/material";
+import { Typography } from "@mui/material";
 
 import { apiBaseUrl } from "./constants";
 import { useStateValue } from "./state";
