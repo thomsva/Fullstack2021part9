@@ -1,7 +1,7 @@
 import React from "react";
-import { Rating } from "@material-ui/lab";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import { withStyles } from "@material-ui/core";
+import { Rating } from '@mui/material';
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import withStyles from '@mui/styles/withStyles';
 
 type BarProps = {
   rating: number;

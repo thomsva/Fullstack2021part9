@@ -6,10 +6,10 @@ import {
   MenuItem,
   TextField as TextFieldMUI,
   Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 import { Diagnosis, Gender } from "../types";
-import { InputLabel } from "@material-ui/core";
-import Input from '@material-ui/core/Input';
+import { InputLabel } from "@mui/material";
+import Input from '@mui/material/Input';
 
 // structure of a single option
 export type GenderOption = {
