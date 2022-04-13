@@ -18,6 +18,35 @@ export interface Patient {
   entries: Entry[]
 }
 
+interface BaseEntry {
+  id: string;
+  description: string;
+  date: string;
+  specialist: string;
+  diagnosisCodes?: Array<Diagnose['code']>;
+}
+
+export interface HospitalEntry extends BaseEntry {
+  type: 'Hospital';
+  specialist: 'MD House';
+  discharge: Discharge
+}
+  
+interface Discharge {
+  date: string;
+  criteria: string;
+}
+export interface OccupationalHealthcareEntry extends BaseEntry {
+  type: 'OccupationalHealthcare';
+  employerName: 'HyPD';
+  sickLeave?: SickLeave;
+}
+
+interface SickLeave {
+  startDate: string;
+  endDate: string;
+}
+
 export type PublicPatient = Omit<Patient, 'ssn' | 'entries' >;
 
 export type PatientInput = Omit<Patient, 'id' | 'entries'>;

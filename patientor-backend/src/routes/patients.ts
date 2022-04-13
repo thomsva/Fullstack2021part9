@@ -8,8 +8,8 @@ const router = express.Router();
 router.get('/:id', (_req, res) => {
   console.log(_req.params.id);
   const patient = patientService.getPatientAllInfo(_req.params.id);
-  if (patient) res.send(patient);
-  res.status(404).send('Patient not found');
+  res.send(patient);
+
   
 
 
