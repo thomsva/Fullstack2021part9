@@ -5,8 +5,8 @@ import { Button, Divider, Container } from "@mui/material";
 import { Typography } from "@mui/material";
 
 import { apiBaseUrl } from "./constants";
-import { setPatientList, useStateValue } from "./state";
-import { Patient } from "./types";
+import { setDiagnoseList, setPatientList, useStateValue } from "./state";
+import { Diagnosis, Patient } from "./types";
 
 import PatientListPage from "./PatientListPage";
 import PatientInfoPage from './PatientInfoPage';
@@ -23,12 +23,27 @@ const App = () => {
           `${apiBaseUrl}/patients`
         );
         dispatch(setPatientList(patientListFromApi));
-        // dispatch({ type: "SET_PATIENT_LIST", payload: patientListFromApi });
       } catch (e) {
         console.error(e);
       }
     };
     void fetchPatientList();
+
+    const fetchDiagnoses = async () => {
+       try {
+        const { data: diagnosesFromApi } = await axios.get<Diagnosis[]>(
+          `${apiBaseUrl}/diagnoses`
+        );
+        //TODO: eslint gives an error when compiling for the following line (npm run lint = ok). 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
+        dispatch(setDiagnoseList(diagnosesFromApi));
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    void fetchDiagnoses();
+
+
   }, [dispatch]);
 
   return (

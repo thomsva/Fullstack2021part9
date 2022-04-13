@@ -12,7 +12,7 @@ import { Card, CardContent, Chip, Divider, Stack, Typography } from '@mui/materi
 const PatientInfoPage = () => {
   const { id } = useParams<{ id: string }>();
   
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients, diagnoses }, dispatch] = useStateValue();
 
   React.useEffect(() => {
     const fetchPatient = async () => {
@@ -54,14 +54,23 @@ const PatientInfoPage = () => {
         </div>
         <Typography>ssn: {patient.ssn}</Typography>
         <Typography>occupation: {patient.occupation}</Typography>
-        {patient.entries.length > 0 && <><Divider /><Typography mt={2} variant="h5">Entries</Typography></>}
-        <Stack mt={2} spacing={2}>
-        {patient.entries.map(e => (<div key={e.id}>
-          <Typography>{e.date} {e.description}</Typography>
-          {e.diagnosisCodes?.map(d => (<Chip key={d} label={d} />))}
-        </div>
-        ))}
-        </Stack>
+        {(patient.entries !== undefined && patient.entries.length > 0)
+          &&
+          <>
+          <Divider />
+          <Typography mt={2} variant="h5">Entries</Typography>
+          <Stack spacing={1}>
+            {patient.entries.map(e => (<div key={e.id}>
+              <Typography>{e.date} {e.description}</Typography>
+              <Stack mt={1} spacing={1}>
+                {e.diagnosisCodes?.map(d => (
+                    <Chip key={d} label={d + ' ' + diagnoses[d].name} />
+                ))}
+              </Stack>
+              </div>
+            ))}
+          </Stack>
+          </>}
       </CardContent>
     </Card>
   );

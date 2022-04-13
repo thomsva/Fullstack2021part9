@@ -7,7 +7,7 @@ const patients: Array<Patient> = patientData;
 
 const getPatients = (): Array<PublicPatient> => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  return patients.map(({ssn, ...publicData}) => publicData);
+  return patients.map(({ssn, entries, ...publicData}) => publicData);
 };
 
 const getPatientAllInfo = (id: string): Patient | undefined => {
