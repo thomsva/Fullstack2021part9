@@ -20,8 +20,6 @@ export interface Patient {
   entries: Entry[]
 }
 
-export type Entry = HospitalEntry | OccupationalHealthcareEntry;
-
 interface BaseEntry {
   id: string;
   description: string;
@@ -35,7 +33,7 @@ export interface HospitalEntry extends BaseEntry {
   specialist: 'MD House';
   discharge: Discharge
 }
-  
+
 interface Discharge {
   date: string;
   criteria: string;
@@ -45,6 +43,16 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
   employerName: 'HyPD';
   sickLeave?: SickLeave;
 }
+
+export interface HealthCheck extends BaseEntry {
+  type: 'HealthCheck';
+  healthCheckRating: 1 | 2 | 3 | 4; 
+}
+
+export type Entry =
+  | HospitalEntry
+  | OccupationalHealthcareEntry
+  | HealthCheck;
 
 interface SickLeave {
   startDate: string;
