@@ -1,5 +1,5 @@
 import patientData from '../../data/patients';
-import { Patient, PublicPatient, PatientInput } from '../types';
+import { Patient, PublicPatient, PatientInput, EntryInput } from '../types';
 import { v1 as uuid } from 'uuid';
 
 
@@ -24,9 +24,22 @@ const addPatient = (newPatient: PatientInput): Patient => {
   return {id: uuid(), entries: [], ...newPatient};
 };
 
+const addEntry = (newEntry: EntryInput, id: string): Patient => {
+  console.log('new Entry:', newEntry);
+  const patient = patients.find((p: Patient) => p.id === id);
+  if (!patient || typeof id !== 'string') {
+    throw new Error('Patient not found');
+  }
+  patientData.find(p => p.id === id)?.entries.push({ id: uuid(), ...newEntry });
+  const updatedPatient = patients.find((p: Patient) => p.id === id);
+
+  if (updatedPatient !== undefined) return updatedPatient;
+  throw new Error('Error when adding entry to patient');
+};
 
 export default {
   getPatients,
   addPatient,
-  getPatientAllInfo
+  getPatientAllInfo,
+  addEntry
 };

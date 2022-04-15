@@ -1,7 +1,21 @@
 import { 
   PatientInput,
-  Gender
+  Gender,
+  Diagnosis,
+  EntryInput,
+  BaseEntry,
+  HospitalEntry,
+  OccupationalHealthcareEntry,
+  HealthCheckEntry,
+  SickLeave,
+  Discharge
 } from './types';
+
+// const assertNever = (value: never): never => {
+//   throw new Error(
+//     `Unhandled discriminated union member: ${JSON.stringify(value)}`
+//   );
+// };
 
 type patientInputFields = {
   name: unknown, 
@@ -20,6 +34,123 @@ export const toPatientInput = ({name, dateOfBirth, gender, ssn, occupation}: pat
     occupation: parseOccupation(occupation)
   });
 };
+
+
+export const toEntryInput = (input: unknown): EntryInput => {
+
+  const entry = input as EntryInput;
+
+  const newBaseEntry: Omit<BaseEntry,'type'| 'id'> = {
+    description: parseString(entry.description),
+    date: parseDate(entry.date),
+    specialist: parseString(entry.specialist),
+    diagnosisCodes: parseDiagnosisCodes(entry.diagnosisCodes),
+  };
+
+  switch (parseType(entry.type))
+  {
+    case 'Hospital':
+      if (entry.specialist !== 'MD House') {
+        throw new Error('Invalid specialist');
+      }
+      const newHospitalEntry: Omit<HospitalEntry, 'id'> = {
+        ...newBaseEntry,
+        specialist: 'MD House',
+        type: 'Hospital',
+        discharge: parseDischarge((entry as HospitalEntry).discharge)
+      };
+      return newHospitalEntry;
+
+      
+    case 'OccupationalHealthcare':
+      if ((entry as OccupationalHealthcareEntry).sickLeave) {
+        const newOccupationalEntry: Omit<OccupationalHealthcareEntry, 'id'> = {
+          ...newBaseEntry,
+          type: 'OccupationalHealthcare',
+          employerName: parseString((entry as OccupationalHealthcareEntry).employerName),
+          sickLeave: parseSickLeave((entry as OccupationalHealthcareEntry).sickLeave)
+        };
+        return newOccupationalEntry;
+      }
+      const newOccupationalEntry: Omit<OccupationalHealthcareEntry, 'id'> = {
+          ...newBaseEntry,
+          type: 'OccupationalHealthcare',
+          employerName: parseString((entry as OccupationalHealthcareEntry).employerName),
+        };
+        return newOccupationalEntry;
+
+    case 'HealthCheck':
+      if (!(entry as HealthCheckEntry).healthCheckRating) {
+        throw new Error('Invalid or missing Health Check Rating');
+      }
+      const newHealthCheckEntry: Omit<HealthCheckEntry, 'id'> = {
+        ...newBaseEntry,
+        type: 'HealthCheck',
+        healthCheckRating: parsehealthCheckRating((entry as HealthCheckEntry).healthCheckRating)
+      };
+      return newHealthCheckEntry;
+    default:
+      throw new Error('Invalid entry');
+  }
+};
+
+const parsehealthCheckRating = (input: unknown): 0 | 1 | 2 | 3 => {
+  if (!input) {
+    throw new Error('Invalid rating');
+  }
+  const rating = Number(input);
+  switch (rating) {
+    case 1 || 2 || 3 || 4:
+      return rating;
+    default:
+      throw new Error('Invalid rating');
+  }
+};
+
+const parseSickLeave = (input: unknown): SickLeave => {
+  if (!input) {
+    throw new Error('Invalid sickleave');
+  }
+  return {
+    startDate: parseDate((input as SickLeave).startDate),
+    endDate: parseDate((input as SickLeave).endDate)
+  };
+
+};
+
+const parseDischarge = (input: unknown): Discharge => {
+  return {
+    date: parseDate((input as Discharge).date),
+    criteria: parseString((input as Discharge).criteria)
+  };
+};
+
+const parseType = (input: unknown): 'Hospital' | 'HealthCheck' | 'OccupationalHealthcare' => {
+  const inputString = parseString(input);
+  switch (inputString) {
+    case 'Hospital' || 'HealthCheck' || 'OccupationalHealthcare':
+      return inputString;
+    default: 
+      throw new Error('Invalid entry type');
+  }
+};
+
+const parseDiagnosisCodes = (input: unknown): Array<Diagnosis["code"]> => {
+  if (input === undefined) return [];
+  if (!Array.isArray(input)) {
+    throw new Error('Invalid diagnosis codes');
+  }
+  const newCodes = input.map(c => parseString(c));
+  return newCodes;
+};
+
+const parseString = (input: unknown): string => {
+  if (!input || !isString(input)) {
+    throw new Error('Invalid string input: ' + input); 
+  }
+  return input;
+};
+
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string';
